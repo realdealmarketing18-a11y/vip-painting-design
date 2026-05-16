@@ -1,13 +1,16 @@
 import { motion } from 'framer-motion'
 
-const BEFORE_IMG = 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=1200&q=80&auto=format&fit=crop'
-const AFTER_IMG  = 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80&auto=format&fit=crop'
+const BEFORE_IMG = 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=1400&q=80&auto=format&fit=crop'
+const AFTER_IMG  = 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1400&q=80&auto=format&fit=crop'
 const COUPLE_IMG = 'https://images.unsplash.com/photo-1522556189639-b150ed9c4330?w=300&q=80&auto=format&fit=crop'
 
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
+const GOLD = '#C4973C'
+const NAVY = '#0F1B3D'
+
+const fade = (delay = 0) => ({
+  initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] },
+  transition: { duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] },
 })
 
 export default function Hero({ onBookClick }) {
@@ -15,66 +18,73 @@ export default function Hero({ onBookClick }) {
     <section style={s.section}>
       <div className="container" style={s.inner}>
 
-        {/* ── Left column ── */}
-        <div style={s.left}>
-          <motion.p {...fadeUp(0.08)} style={s.lookWhat}>LOOK WHAT HAPPENED TO</motion.p>
-
-          <motion.div {...fadeUp(0.16)}>
-            <h1 style={s.transformed}>Transformed</h1>
-            <h1 style={s.names}>Miguel &amp; Karla's</h1>
-            <h1 style={s.home}>Home</h1>
-          </motion.div>
-
-          <motion.p {...fadeUp(0.26)} style={s.subhead}>
-            From Dull to Jaw-Droppingly Beautiful
-          </motion.p>
-
-          <motion.p {...fadeUp(0.32)} style={s.body}>
-            We don’t just paint homes, we transform them. See how we took their
+        {/* ── Headline block ── */}
+        <motion.div {...fade(0.08)} style={s.headlineBlock}>
+          <p style={s.overline}>LOOK WHAT HAPPENED TO</p>
+          <h1 style={s.h1Wrap}>
+            <span style={s.transformed}>Transformed</span>
+            <span style={s.names}>Miguel &amp; Karla&rsquo;s</span>
+            <span style={s.home}>Home</span>
+          </h1>
+          <p style={s.subhead}>From Dull to Jaw-Droppingly Beautiful</p>
+          <p style={s.body}>
+            We don&rsquo;t just paint homes, we transform them. See how we took their
             outdated exterior and created a stunning masterpiece that became the
             envy of the neighborhood.
-          </motion.p>
+          </p>
+        </motion.div>
 
-          <motion.div {...fadeUp(0.42)}>
-            <button className="btn-gold" onClick={onBookClick} style={s.ctaBtn}>
-              GET MY FREE QUOTE &nbsp;&rarr;
-            </button>
-            <div style={s.trustRow}>
-              <span style={s.trustItem}>✓ No Pressure</span>
-              <span style={s.trustItem}>✓ No Obligation</span>
-              <span style={s.trustItem}>✓ 100% Free</span>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* ── Right column ── */}
-        <motion.div {...fadeUp(0.2)} style={s.right}>
+        {/* ── Video / Before-After — underneath the headline ── */}
+        <motion.div {...fade(0.2)} style={s.videoWrap}>
           <div style={s.frame}>
+
+            {/* Split image */}
             <div style={s.split}>
-              <div style={s.halfBefore}>
-                <img src={BEFORE_IMG} alt="Before" style={s.halfImg} />
-                <span style={{ ...s.badge, left: '12px' }}>BEFORE</span>
+              <div style={s.half}>
+                <img src={BEFORE_IMG} alt="Before" style={s.img} />
+                <span style={{ ...s.badge, left: '14px' }}>BEFORE</span>
               </div>
-              <div style={s.halfAfter}>
-                <img src={AFTER_IMG} alt="After" style={s.halfImg} />
-                <span style={{ ...s.badge, right: '12px' }}>AFTER</span>
+              <div style={s.half}>
+                <img src={AFTER_IMG} alt="After" style={s.img} />
+                <span style={{ ...s.badge, right: '14px' }}>AFTER</span>
               </div>
+
+              {/* Gold divider */}
               <div style={s.divider} />
-              <button style={s.playWrap} onClick={onBookClick} aria-label="Watch transformation">
+
+              {/* Play button */}
+              <button style={s.playBtn} onClick={onBookClick} aria-label="Watch transformation video">
                 <div style={s.playCircle}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
-                    <polygon points="5 3 19 12 5 21 5 3" />
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
+                    <polygon points="6 3 20 12 6 21 6 3" />
                   </svg>
                 </div>
+                <span style={s.playLabel}>WATCH THE TRANSFORMATION</span>
               </button>
             </div>
+
+            {/* Testimonial strip */}
             <div style={s.strip}>
               <img src={COUPLE_IMG} alt="Miguel and Karla" style={s.coupleImg} />
               <p style={s.quote}>
-                “We couldn’t believe it was the same house. VIP Home Painting
-                exceeded every expectation we had!” – <em>Miguel &amp; Karla</em>
+                &ldquo;We couldn&rsquo;t believe it was the same house. VIP Home Painting
+                exceeded every expectation we had!&rdquo;
+                &nbsp;<em>– Miguel &amp; Karla, Scottsdale AZ</em>
               </p>
             </div>
+
+          </div>
+        </motion.div>
+
+        {/* ── CTA block — below the video ── */}
+        <motion.div {...fade(0.34)} style={s.ctaBlock}>
+          <button className="btn-gold" onClick={onBookClick} style={s.ctaBtn}>
+            GET MY FREE QUOTE &nbsp;&rarr;
+          </button>
+          <div style={s.trustRow}>
+            <span style={s.trust}>✓ No Pressure</span>
+            <span style={s.trust}>✓ No Obligation</span>
+            <span style={s.trust}>✓ 100% Free</span>
           </div>
         </motion.div>
 
@@ -83,33 +93,209 @@ export default function Hero({ onBookClick }) {
   )
 }
 
-const GOLD = '#C4973C'
-const NAVY = '#0F1B3D'
-
 const s = {
-  section: { paddingTop: '72px', background: '#F7F4EF', minHeight: '100vh', display: 'flex', alignItems: 'center' },
-  inner: { display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '56px', alignItems: 'center', paddingTop: '32px', paddingBottom: '40px' },
-  left: {},
-  lookWhat: { fontFamily: "'Montserrat', sans-serif", fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.28em', textTransform: 'uppercase', color: NAVY, marginBottom: '12px' },
-  transformed: { fontFamily: "'Playfair Display', Georgia, serif", fontWeight: 700, fontSize: 'clamp(2.6rem, 5vw, 4.2rem)', color: NAVY, lineHeight: 1.0, margin: 0 },
-  names: { fontFamily: "'Cormorant Garamond', Georgia, serif", fontStyle: 'italic', fontWeight: 600, fontSize: 'clamp(2.6rem, 5vw, 4.2rem)', color: GOLD, lineHeight: 1.0, margin: 0 },
-  home: { fontFamily: "'Playfair Display', Georgia, serif", fontWeight: 700, fontSize: 'clamp(2.6rem, 5vw, 4.2rem)', color: NAVY, lineHeight: 1.05, margin: '0 0 18px' },
-  subhead: { fontFamily: "'Playfair Display', Georgia, serif", fontStyle: 'italic', fontSize: 'clamp(0.9rem, 1.4vw, 1.05rem)', color: '#5A5A5A', marginBottom: '14px' },
-  body: { fontFamily: "'Montserrat', sans-serif", fontSize: '0.85rem', lineHeight: 1.75, color: '#5A5A5A', marginBottom: '28px', maxWidth: '400px' },
-  ctaBtn: { marginBottom: '14px', display: 'block' },
-  trustRow: { display: 'flex', gap: '18px', flexWrap: 'wrap' },
-  trustItem: { fontFamily: "'Montserrat', sans-serif", fontSize: '0.65rem', fontWeight: 600, color: '#7A7A7A' },
-  right: {},
-  frame: { border: `3px solid ${GOLD}`, overflow: 'hidden', boxShadow: '0 16px 48px rgba(15,27,61,0.18)' },
-  split: { position: 'relative', width: '100%', aspectRatio: '16/11', display: 'flex', overflow: 'hidden' },
-  halfBefore: { position: 'relative', width: '50%', overflow: 'hidden', flexShrink: 0 },
-  halfAfter:  { position: 'relative', width: '50%', overflow: 'hidden', flexShrink: 0 },
-  halfImg: { width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' },
-  badge: { position: 'absolute', top: '12px', background: 'rgba(15,27,61,0.65)', color: '#fff', fontFamily: "'Montserrat', sans-serif", fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.14em', padding: '4px 12px', textTransform: 'uppercase' },
-  divider: { position: 'absolute', top: 0, bottom: 0, left: '50%', width: '3px', background: GOLD, transform: 'translateX(-50%)', zIndex: 5 },
-  playWrap: { position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', background: 'none', border: 'none', cursor: 'pointer', zIndex: 10, padding: 0 },
-  playCircle: { width: '64px', height: '64px', borderRadius: '50%', background: GOLD, display: 'flex', alignItems: 'center', justifyContent: 'center', paddingLeft: '4px', boxShadow: '0 4px 22px rgba(196,151,60,0.55)' },
-  strip: { background: NAVY, padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '14px' },
-  coupleImg: { width: '50px', height: '50px', borderRadius: '50%', objectFit: 'cover', border: `2px solid ${GOLD}`, flexShrink: 0 },
-  quote: { fontFamily: "'Montserrat', sans-serif", fontSize: '0.78rem', fontWeight: 400, color: 'rgba(255,255,255,0.9)', lineHeight: 1.55, margin: 0 },
+  section: {
+    paddingTop: '88px',
+    paddingBottom: '64px',
+    background: '#F7F4EF',
+  },
+  inner: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '36px',
+    maxWidth: '860px',
+  },
+
+  /* Headline */
+  headlineBlock: {
+    textAlign: 'center',
+    width: '100%',
+  },
+  overline: {
+    fontFamily: "'Montserrat', sans-serif",
+    fontSize: '0.62rem',
+    fontWeight: 700,
+    letterSpacing: '0.3em',
+    textTransform: 'uppercase',
+    color: NAVY,
+    marginBottom: '14px',
+  },
+  h1Wrap: {
+    display: 'flex',
+    flexDirection: 'column',
+    lineHeight: 1.0,
+    marginBottom: '16px',
+  },
+  transformed: {
+    fontFamily: "'Playfair Display', Georgia, serif",
+    fontWeight: 700,
+    fontSize: 'clamp(2.8rem, 6vw, 4.8rem)',
+    color: NAVY,
+  },
+  names: {
+    fontFamily: "'Cormorant Garamond', Georgia, serif",
+    fontStyle: 'italic',
+    fontWeight: 600,
+    fontSize: 'clamp(2.8rem, 6vw, 4.8rem)',
+    color: GOLD,
+  },
+  home: {
+    fontFamily: "'Playfair Display', Georgia, serif",
+    fontWeight: 700,
+    fontSize: 'clamp(2.8rem, 6vw, 4.8rem)',
+    color: NAVY,
+    marginBottom: '4px',
+  },
+  subhead: {
+    fontFamily: "'Playfair Display', Georgia, serif",
+    fontStyle: 'italic',
+    fontSize: 'clamp(1rem, 1.6vw, 1.15rem)',
+    color: '#5A5A5A',
+    marginBottom: '12px',
+  },
+  body: {
+    fontFamily: "'Montserrat', sans-serif",
+    fontSize: '0.88rem',
+    lineHeight: 1.75,
+    color: '#5A5A5A',
+    maxWidth: '580px',
+    margin: '0 auto',
+  },
+
+  /* Video/Before-After */
+  videoWrap: {
+    width: '100%',
+  },
+  frame: {
+    border: `3px solid ${GOLD}`,
+    overflow: 'hidden',
+    boxShadow: '0 20px 56px rgba(15,27,61,0.18)',
+  },
+  split: {
+    position: 'relative',
+    width: '100%',
+    aspectRatio: '16/9',
+    display: 'flex',
+    overflow: 'hidden',
+  },
+  half: {
+    position: 'relative',
+    width: '50%',
+    flexShrink: 0,
+    overflow: 'hidden',
+  },
+  img: {
+    width: '200%',
+    height: '100%',
+    objectFit: 'cover',
+    display: 'block',
+  },
+  badge: {
+    position: 'absolute',
+    top: '14px',
+    background: 'rgba(15,27,61,0.7)',
+    color: '#fff',
+    fontFamily: "'Montserrat', sans-serif",
+    fontSize: '0.55rem',
+    fontWeight: 700,
+    letterSpacing: '0.16em',
+    padding: '4px 14px',
+    textTransform: 'uppercase',
+    borderRadius: '20px',
+  },
+  divider: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: '50%',
+    width: '3px',
+    background: GOLD,
+    transform: 'translateX(-50%)',
+    zIndex: 5,
+  },
+  playBtn: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    background: 'none',
+    border: 'none',
+    cursor: 'pointer',
+    zIndex: 10,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '10px',
+    padding: 0,
+  },
+  playCircle: {
+    width: '72px',
+    height: '72px',
+    borderRadius: '50%',
+    background: GOLD,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingLeft: '4px',
+    boxShadow: '0 6px 28px rgba(196,151,60,0.55)',
+  },
+  playLabel: {
+    fontFamily: "'Montserrat', sans-serif",
+    fontSize: '0.52rem',
+    fontWeight: 700,
+    letterSpacing: '0.18em',
+    color: '#fff',
+    textTransform: 'uppercase',
+    textShadow: '0 1px 6px rgba(0,0,0,0.6)',
+    whiteSpace: 'nowrap',
+  },
+  strip: {
+    background: NAVY,
+    padding: '18px 24px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '16px',
+  },
+  coupleImg: {
+    width: '52px',
+    height: '52px',
+    borderRadius: '50%',
+    objectFit: 'cover',
+    border: `2px solid ${GOLD}`,
+    flexShrink: 0,
+  },
+  quote: {
+    fontFamily: "'Montserrat', sans-serif",
+    fontSize: '0.8rem',
+    fontWeight: 400,
+    color: 'rgba(255,255,255,0.92)',
+    lineHeight: 1.55,
+    margin: 0,
+  },
+
+  /* CTA */
+  ctaBlock: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '14px',
+  },
+  ctaBtn: {
+    fontSize: '0.8rem',
+    padding: '17px 40px',
+    letterSpacing: '0.14em',
+  },
+  trustRow: {
+    display: 'flex',
+    gap: '24px',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+  },
+  trust: {
+    fontFamily: "'Montserrat', sans-serif",
+    fontSize: '0.68rem',
+    fontWeight: 600,
+    color: '#7A7A7A',
+  },
 }
