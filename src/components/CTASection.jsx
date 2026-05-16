@@ -1,89 +1,34 @@
-import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { useRef } from 'react'
+import { motion, useInView } from 'framer-motion'
 
 export default function CTASection({ onBookClick }) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-100px' });
-
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-60px' })
   return (
-    <section ref={ref} id="contact" className="section" style={styles.section}>
-      <div className="container">
-        <motion.div 
-          initial={{ opacity: 0, y: 40 }} 
-          animate={inView ? { opacity: 1, y: 0 } : {}} 
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }} 
-          style={styles.card}
-        >
-          <div style={styles.imageBox}>
-            <img 
-              src="https://images.unsplash.com/photo-1613564175376-857e4e1de196?q=80&w=1200&auto=format&fit=crop" 
-              alt="Luxury Painting Process" 
-              style={styles.image} 
-            />
-          </div>
-          <div style={styles.content}>
-            <h2 className="headline headline-lg" style={{ marginBottom: '24px', color: '#1a1f4e' }}>
-              Every Project Begins<br />
-              <em className="headline-accent">With A Conversation.</em>
-            </h2>
-            <p className="body-text" style={{ maxWidth: '600px', marginBottom: '16px' }}>
-              Currently accepting The Bridges visualization slots — limited availability this month.
-            </p>
-            <p className="body-text" style={{ maxWidth: '600px', marginBottom: '48px' }}>
-              Elevating The Bridges, Rancho Cucamonga homes with professional craftsmanship and royal service standards.
-            </p>
-            <div style={styles.actions}>
-              <button className="btn-primary" onClick={onBookClick}>
-                Book Consultation
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </button>
-              <a href="tel:9093125400" className="btn-secondary">
-                (909) 312-5400
-              </a>
-            </div>
+    <section ref={ref} style={s.section}>
+      <div className="container" style={s.inner}>
+        <motion.div initial={{ opacity: 0, y: 28 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7 }} style={s.content}>
+          <p style={s.overline}>READY TO TRANSFORM YOUR HOME?</p>
+          <h2 style={s.headline}>Let’s Make Your Home the<br />Envy of the Neighborhood</h2>
+          <button className="btn-gold" onClick={onBookClick} style={s.btn}>GET MY FREE QUOTE NOW &nbsp;&rarr;</button>
+          <div style={s.trustRow}>
+            <span style={s.trust}>✓ No Pressure</span>
+            <span style={s.trust}>✓ No Obligation</span>
+            <span style={s.trust}>✓ 100% Free</span>
           </div>
         </motion.div>
       </div>
     </section>
-  );
+  )
 }
 
-const styles = {
-  section: {
-    background: '#F8F7F4', // Cream
-    paddingBottom: '160px',
-  },
-  card: {
-    background: '#FFFFFF',
-    border: '1px solid rgba(26,31,78,0.1)',
-    boxShadow: '0 16px 48px rgba(26,31,78,0.06)',
-    display: 'grid',
-    gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)',
-    gap: '0',
-    overflow: 'hidden',
-  },
-  content: {
-    padding: '80px 64px',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    background: '#FFFFFF',
-  },
-  actions: {
-    display: 'flex',
-    gap: '20px',
-    flexWrap: 'wrap',
-  },
-  imageBox: {
-    position: 'relative',
-    height: '100%',
-    minHeight: '400px',
-  },
-  image: {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-  },
-};
+const s = {
+  section: { background: '#0F1B3D', padding: '80px 0' },
+  inner: { display: 'flex', justifyContent: 'center' },
+  content: { textAlign: 'center', maxWidth: '580px' },
+  overline: { fontFamily: "'Montserrat', sans-serif", fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.55)', marginBottom: '16px' },
+  headline: { fontFamily: "'Playfair Display', Georgia, serif", fontWeight: 700, fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)', color: '#FFFFFF', lineHeight: 1.2, marginBottom: '30px' },
+  btn: { fontSize: '0.72rem', padding: '16px 40px', marginBottom: '18px' },
+  trustRow: { display: 'flex', justifyContent: 'center', gap: '22px', flexWrap: 'wrap' },
+  trust: { fontFamily: "'Montserrat', sans-serif", fontSize: '0.62rem', color: 'rgba(255,255,255,0.55)', fontWeight: 500 },
+}
