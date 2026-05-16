@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 
-import Hero            from './components/Hero'
-import ColorSwatches  from './components/ColorSwatches'
+import Hero             from './components/Hero'
+import ColorSwatches   from './components/ColorSwatches'
 import EducationSection from './components/EducationSection'
 import CaseStudiesSection from './components/CaseStudiesSection'
-import BottomFourCol  from './components/BottomFourCol'
-import ProjectScopeSection from './components/ProjectScopeSection'
-import CTASection     from './components/CTASection'
-import Footer         from './components/Footer'
-import FloatingForm   from './components/FloatingForm'
+import BottomFourCol   from './components/BottomFourCol'
+import ScopeCTASection from './components/ScopeCTASection'
+import Footer          from './components/Footer'
+import FloatingForm    from './components/FloatingForm'
 
 function Nav({ onBookClick }) {
   const [scrolled, setScrolled] = useState(false)
@@ -41,7 +40,8 @@ function Nav({ onBookClick }) {
         onClick={onBookClick}
         style={{ padding: '11px 22px', fontSize: '0.6rem', letterSpacing: '0.12em' }}
       >
-        Get My Free Quote
+        <span style={{ fontWeight: 400 }}>GET MY&nbsp;</span>
+        <span style={{ fontWeight: 700 }}>FREE QUOTE</span>
       </button>
     </nav>
   )
@@ -60,7 +60,7 @@ function ScrollTop() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-      style={{ position:'fixed', bottom:'28px', right:'28px', width:'40px', height:'40px', background:'#C4973C', border:'none', color:'#fff', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', zIndex:50, borderRadius:'2px' }}
+      style={{ position: 'fixed', bottom: '28px', right: '28px', width: '40px', height: '40px', background: '#C4973C', border: 'none', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 50, borderRadius: '2px' }}
       aria-label="Scroll to top"
     >
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -77,13 +77,12 @@ export default function App() {
     <>
       <Nav onBookClick={() => setFormOpen(true)} />
       <main id="home">
-        <Hero onBookClick={() => setFormOpen(true)} />
+        <Hero           onBookClick={() => setFormOpen(true)} />
         <ColorSwatches />
         <EducationSection onBookClick={() => setFormOpen(true)} />
         <CaseStudiesSection onBookClick={() => setFormOpen(true)} />
-        <BottomFourCol onBookClick={() => setFormOpen(true)} />
-        <ProjectScopeSection />
-        <CTASection onBookClick={() => setFormOpen(true)} />
+        <BottomFourCol  onBookClick={() => setFormOpen(true)} />
+        <ScopeCTASection onBookClick={() => setFormOpen(true)} />
       </main>
       <Footer onBookClick={() => setFormOpen(true)} />
       <FloatingForm isOpen={formOpen} onClose={() => setFormOpen(false)} />
