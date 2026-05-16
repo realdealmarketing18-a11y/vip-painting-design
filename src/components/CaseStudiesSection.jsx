@@ -1,93 +1,98 @@
-import { useRef } from 'react'
+import { useState, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
+
+const SWATCHES = [
+  'radial-gradient(circle at 35% 32%, #D9C9A6, #B5A37A 50%, #8A7050 100%)',
+  'radial-gradient(circle at 35% 32%, #FFFFFF, #EDE9DF 50%, #D0CBBD 100%)',
+  'radial-gradient(circle at 35% 32%, #99A87D, #6B7556 50%, #4A5238 100%)',
+  'radial-gradient(circle at 35% 32%, #922E42, #6B2737 50%, #4A1A25 100%)',
+]
 
 const CASES = [
   {
-    names: 'Ceasar & Julie',
-    role: 'Rancho Cucamonga Homeowners',
-    videoTitle: 'Unbelievable 4-Day Home Painting Transformation',
-    videoSub: 'Ceasar & Julie — Rancho Cucamonga, Inland Empire CA',
-    thumb: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200&auto=format&fit=crop',
-    headline: "Ceasar & Julie's Personalized Home Painting Transformation In Rancho Cucamonga, Inland Empire CA",
-    reason: 'Ceasar and Julie sought to inject life and personality into their Rancho Cucamonga home with a creative painting job that would make their home stand out after living there for 10 years.',
-    strategy: 'Through a FREE 30-Minute Personalized Color Consultation, VIP Home Painting guided them in selecting a harmonious blend of colors tailored to their personality and architecture.',
-    mood: 'Harmonious and Distinctive — the transformation turned their home into a true masterpiece, radiating joy and uniqueness, enhancing curb appeal with a touch that reflects their vibrant personality.',
+    title: "DOUGLAS & SHERI'S TRANSFORMATION",
+    beforeImg: 'https://images.unsplash.com/photo-1560184897-ae75f418493e?w=900&q=80&auto=format&fit=crop',
+    afterImg:  'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=900&q=80&auto=format&fit=crop',
+    text: "We took Douglas & Sheri's dated, faded exterior and transformed it into a stunning masterpiece. The new colors, combined with our meticulous preparation, completely changed the look and feel of their home.",
   },
   {
-    names: 'Douglas & Sheri',
-    role: 'Sierra Lakes, Fontana Homeowners',
-    videoTitle: 'Stunning Sierra Lakes, Fontana Transformation',
-    videoSub: 'Douglas & Sheri — Fontana, Inland Empire CA',
-    thumb: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1200&auto=format&fit=crop',
-    headline: "Douglas & Sheri's Personalized Home Painting Transformation In Fontana, Inland Empire",
-    reason: 'Homeowners Douglas and Sheri wanted to stand out in their Sierra Lakes, Fontana neighborhood by personalizing their home with a sophisticated and elegant look.',
-    strategy: 'Through a FREE 30-Minute Personalized Color Consultation, VIP Home Painting helped them choose a sophisticated color scheme that reflected their unique style.',
-    mood: 'Elegant and Sophisticated — the transformation achieved their goal, turning their house into a unique masterpiece that stands out with elegance and sophistication.',
+    title: "CEASAR & JULIE'S TRANSFORMATION",
+    beforeImg: 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=900&q=80&auto=format&fit=crop',
+    afterImg:  'https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=900&q=80&auto=format&fit=crop',
+    text: 'Ceasar & Julie wanted a modern update that would make their home stand out. We delivered beyond their expectations with a color combination that’s both timeless and breathtaking.',
   },
 ]
 
-function VideoPlaceholder({ thumb, title, sub }) {
+function Slider({ beforeImg, afterImg }) {
+  const [pos, setPos] = useState(50)
+  const containerRef = useRef(null)
+  const isDragging = useRef(false)
+
+  const move = (clientX) => {
+    if (!containerRef.current || !isDragging.current) return
+    const rect = containerRef.current.getBoundingClientRect()
+    const pct = Math.min(92, Math.max(8, ((clientX - rect.left) / rect.width) * 100))
+    setPos(pct)
+  }
+
   return (
-    <div style={vStyles.wrap}>
-      <img src={thumb} alt={title} style={vStyles.thumb} />
-      <div style={vStyles.overlay} />
-      <div style={vStyles.center}>
-        <div style={vStyles.playCircle}>
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="#FFFFFF">
-            <polygon points="5 3 19 12 5 21 5 3" />
+    <div
+      ref={containerRef}
+      style={sl.wrap}
+      onMouseMove={(e) => move(e.clientX)}
+      onMouseUp={() => { isDragging.current = false }}
+      onMouseLeave={() => { isDragging.current = false }}
+      onTouchMove={(e) => { e.preventDefault(); move(e.touches[0].clientX) }}
+      onTouchEnd={() => { isDragging.current = false }}
+    >
+      {/* Before image (full) */}
+      <img src={beforeImg} alt="Before" style={sl.imgFull} />
+
+      {/* After image (revealed from left via clip) */}
+      <div style={{ position: 'absolute', inset: 0, clipPath: `inset(0 ${100 - pos}% 0 0)` }}>
+        <img src={afterImg} alt="After" style={sl.imgFull} />
+      </div>
+
+      {/* Divider + handle */}
+      <div style={{ ...sl.divLine, left: `${pos}%` }}>
+        <div
+          style={sl.handle}
+          onMouseDown={() => { isDragging.current = true }}
+          onTouchStart={() => { isDragging.current = true }}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
+            <path d="M11 17l-5-5 5-5M13 17l5-5-5-5" />
           </svg>
         </div>
-        <span style={vStyles.watchLabel}>WATCH THE TRANSFORMATION</span>
       </div>
-      <div style={vStyles.badge}>
-        <p style={vStyles.badgeTitle}>{title}</p>
-        <p style={vStyles.badgeSub}>{sub}</p>
-      </div>
+
+      {/* Labels */}
+      <span style={{ ...sl.label, left: '10px' }}>BEFORE</span>
+      <span style={{ ...sl.label, right: '10px' }}>AFTER</span>
     </div>
   )
 }
 
-function CaseCard({ c, index, inView }) {
+function CaseCard({ c, delay, inView, onBookClick }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 32 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.8, delay: index * 0.18, ease: [0.22, 1, 0.36, 1] }}
-      style={styles.card}
+      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
+      style={cs.card}
     >
-      <VideoPlaceholder thumb={c.thumb} title={c.videoTitle} sub={c.videoSub} />
-
-      <div style={styles.cardBody}>
-        <div style={styles.nameRow}>
-          <div style={styles.avatar}>
-            {c.names.split(' ')[0][0]}{c.names.split('& ')[1]?.[0] || ''}
-          </div>
-          <div>
-            <p style={styles.names}>{c.names}</p>
-            <p style={styles.role}>{c.role}</p>
-          </div>
-        </div>
-
-        <div style={styles.tagRow}>
-          <span style={styles.tag}>HOME EXTERIOR PAINTING PROJECT DETAILS</span>
-        </div>
-
-        <h3 className="headline headline-sm" style={styles.caseHeadline}>{c.headline}</h3>
-
-        <div style={styles.detailsGrid}>
-          {[
-            { label: 'REASON FOR PAINTING', text: c.reason },
-            { label: 'STRATEGY', text: c.strategy },
-            { label: 'MOOD DESIRED', text: c.mood },
-          ].map((d) => (
-            <div key={d.label} style={styles.detailRow}>
-              <p style={styles.detailLabel}>{d.label}</p>
-              <p className="body-text" style={styles.detailText}>{d.text}</p>
-            </div>
+      <p style={cs.cardTitle}>{c.title}</p>
+      <Slider beforeImg={c.beforeImg} afterImg={c.afterImg} />
+      <div style={cs.cardBody}>
+        <div style={cs.swatchRow}>
+          {SWATCHES.map((g, i) => (
+            <div key={i} style={{ ...cs.swatch, background: g }} />
           ))}
         </div>
-
-        <div style={styles.accentBar} />
+        <p style={cs.text}>{c.text}</p>
+        <button style={cs.watchBtn} onClick={onBookClick}>
+          WATCH THEIR STORY &nbsp;&rarr;
+        </button>
       </div>
     </motion.div>
   )
@@ -98,185 +103,138 @@ export default function CaseStudiesSection({ onBookClick }) {
   const inView = useInView(ref, { once: true, margin: '-80px' })
 
   return (
-    <section ref={ref} className="section" style={styles.section}>
+    <section ref={ref} style={cs.section}>
       <div className="container">
-
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7 }}
-          style={styles.header}
-        >
-          <div style={styles.labelRow}>
-            <div style={styles.labelLine} />
-            <span className="overline">Client Transformations</span>
-          </div>
-          <h2 className="headline headline-lg" style={styles.headline}>
-            Inland Empire Home Painting Projects
-          </h2>
-          <p className="body-text" style={styles.sub}>
-            Transforming Homes With Precision And Care
-          </p>
-        </motion.div>
-
-        <div style={styles.grid}>
+        <div style={cs.grid}>
           {CASES.map((c, i) => (
-            <CaseCard key={c.names} c={c} index={i} inView={inView} />
+            <CaseCard key={c.title} c={c} delay={i * 0.15} inView={inView} onBookClick={onBookClick} />
           ))}
         </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          style={styles.ctaRow}
-        >
-          <button className="btn-primary" onClick={onBookClick} style={{ fontSize: '0.7rem', padding: '16px 40px' }}>
-            Claim Free Color Consult + Irresistible Estimate
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
-          </button>
-        </motion.div>
       </div>
     </section>
   )
 }
 
-const vStyles = {
+const GOLD = '#C4973C'
+const NAVY = '#0F1B3D'
+
+const sl = {
   wrap: {
     position: 'relative',
     width: '100%',
-    aspectRatio: '16/9',
-    background: '#1a1f4e',
+    aspectRatio: '4/3',
     overflow: 'hidden',
+    userSelect: 'none',
+    background: '#ccc',
+    cursor: 'ew-resize',
   },
-  thumb: { width: '100%', height: '100%', objectFit: 'cover', opacity: 0.6 },
-  overlay: {
+  imgFull: {
     position: 'absolute',
     inset: 0,
-    background: 'linear-gradient(to top, rgba(26,31,78,0.9) 0%, rgba(26,31,78,0.2) 55%)',
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    display: 'block',
   },
-  center: {
+  divLine: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    width: '3px',
+    background: GOLD,
+    transform: 'translateX(-50%)',
+    zIndex: 10,
+  },
+  handle: {
     position: 'absolute',
     top: '50%',
     left: '50%',
-    transform: 'translate(-50%, -60%)',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: '12px',
-    zIndex: 5,
-    cursor: 'pointer',
-  },
-  playCircle: {
-    width: '64px',
-    height: '64px',
+    transform: 'translate(-50%, -50%)',
+    width: '38px',
+    height: '38px',
     borderRadius: '50%',
-    background: '#e8833a',
+    background: GOLD,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingLeft: '4px',
-    boxShadow: '0 6px 24px rgba(232,131,58,0.45)',
+    boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
+    cursor: 'ew-resize',
   },
-  watchLabel: {
-    fontFamily: "'Montserrat', sans-serif",
-    fontSize: '0.55rem',
-    fontWeight: 700,
-    letterSpacing: '0.2em',
-    color: '#FFFFFF',
-    textShadow: '0 1px 4px rgba(0,0,0,0.5)',
-  },
-  badge: {
+  label: {
     position: 'absolute',
-    bottom: '16px',
-    left: '16px',
-    zIndex: 5,
-  },
-  badgeTitle: {
-    fontFamily: "'Cormorant Garamond', serif",
-    fontSize: '0.95rem',
-    color: '#FFFFFF',
-    margin: '0 0 3px',
-    fontWeight: 500,
-  },
-  badgeSub: {
+    top: '10px',
+    background: 'rgba(15,27,61,0.65)',
+    color: '#fff',
     fontFamily: "'Montserrat', sans-serif",
     fontSize: '0.52rem',
-    letterSpacing: '0.15em',
-    color: 'rgba(255,255,255,0.55)',
+    fontWeight: 700,
+    letterSpacing: '0.12em',
+    padding: '3px 10px',
     textTransform: 'uppercase',
-    margin: 0,
+    zIndex: 5,
   },
 }
 
-const styles = {
-  section: { background: '#FFFFFF' },
-  header: { marginBottom: '56px', maxWidth: '700px' },
-  labelRow: { display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' },
-  labelLine: { width: '32px', height: '2px', background: '#e8833a' },
-  headline: { color: '#1a1f4e', marginBottom: '12px' },
-  sub: { fontSize: '1.05rem' },
-  grid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px', marginBottom: '48px' },
-  card: {
+const cs = {
+  section: {
     background: '#FFFFFF',
-    border: '1px solid rgba(26,31,78,0.08)',
+    padding: '72px 0',
+    borderTop: '1px solid rgba(15,27,61,0.07)',
+  },
+  grid: {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+    gap: '40px',
+  },
+  card: {
+    border: '1px solid rgba(15,27,61,0.1)',
     overflow: 'hidden',
-    boxShadow: '0 4px 24px rgba(26,31,78,0.04)',
   },
-  cardBody: { padding: '36px' },
-  nameRow: { display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' },
-  avatar: {
-    width: '44px',
-    height: '44px',
-    background: 'rgba(232,131,58,0.1)',
-    border: '1px solid rgba(232,131,58,0.25)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontFamily: "'Cormorant Garamond', serif",
-    fontSize: '1.1rem',
-    color: '#e8833a',
-    flexShrink: 0,
-  },
-  names: {
+  cardTitle: {
     fontFamily: "'Montserrat', sans-serif",
-    fontSize: '0.75rem',
-    fontWeight: 700,
-    color: '#1a1f4e',
-    margin: 0,
-    letterSpacing: '0.05em',
-  },
-  role: {
-    fontFamily: "'Poppins', sans-serif",
-    fontSize: '0.7rem',
-    color: '#9a9a9a',
-    margin: '3px 0 0',
-    fontWeight: 300,
-  },
-  tagRow: { marginBottom: '16px' },
-  tag: {
-    fontFamily: "'Montserrat', sans-serif",
-    fontSize: '0.52rem',
+    fontSize: '0.6rem',
     fontWeight: 700,
     letterSpacing: '0.18em',
     textTransform: 'uppercase',
-    color: '#e8833a',
+    color: NAVY,
+    padding: '12px 20px',
+    borderBottom: '1px solid rgba(15,27,61,0.08)',
+    margin: 0,
+    background: '#F7F4EF',
   },
-  caseHeadline: { color: '#1a1f4e', marginBottom: '24px', lineHeight: 1.3 },
-  detailsGrid: { display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '24px' },
-  detailRow: { borderLeft: '2px solid rgba(232,131,58,0.3)', paddingLeft: '16px' },
-  detailLabel: {
+  cardBody: { padding: '20px' },
+  swatchRow: {
+    display: 'flex',
+    gap: '10px',
+    marginBottom: '14px',
+    alignItems: 'center',
+  },
+  swatch: {
+    width: '32px',
+    height: '32px',
+    borderRadius: '50%',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.18)',
+    flexShrink: 0,
+  },
+  text: {
     fontFamily: "'Montserrat', sans-serif",
-    fontSize: '0.55rem',
-    fontWeight: 700,
-    letterSpacing: '0.15em',
-    textTransform: 'uppercase',
-    color: '#e8833a',
-    margin: '0 0 4px',
+    fontSize: '0.8rem',
+    lineHeight: 1.72,
+    color: '#5A5A5A',
+    marginBottom: '16px',
   },
-  detailText: { fontSize: '0.85rem', lineHeight: 1.65, margin: 0 },
-  accentBar: { width: '40px', height: '2px', background: '#e8833a' },
-  ctaRow: { display: 'flex', justifyContent: 'center' },
+  watchBtn: {
+    fontFamily: "'Montserrat', sans-serif",
+    fontSize: '0.6rem',
+    fontWeight: 700,
+    letterSpacing: '0.14em',
+    color: GOLD,
+    background: 'none',
+    border: `1.5px solid ${GOLD}`,
+    padding: '10px 20px',
+    cursor: 'pointer',
+    textTransform: 'uppercase',
+    borderRadius: '2px',
+    transition: 'all 200ms',
+  },
 }
